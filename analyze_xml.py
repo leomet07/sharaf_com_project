@@ -88,11 +88,44 @@ for triangle_name in triangles:
     triangle = triangles[triangle_name]
     centroid = caclulate_centroid_of_triangle(
         *triangle
-    )  # Spreads [v1, v2, v3] into v1, v2, v3 params
+    )  # Centroid is COM # Spreads [v1, v2, v3] into v1, v2, v3 params
     area = calculate_area_of_triangle(*triangle)
     sum_of_all_areas += area
     sum_of_all_centroid_x_times_area += centroid[0] * area
     sum_of_all_centroid_y_times_area += centroid[1] * area
+
+
+# Manually add edge cases
+# Semi circle 1 (sadness head)
+sum_of_all_areas += 1.875028225
+sum_of_all_centroid_x_times_area += 3.3621215 * 1.875028225
+sum_of_all_centroid_y_times_area += 0.3937850313 * 1.875028225
+# circle 1 (fear left eye, id)
+sum_of_all_areas += 0.2043799831
+sum_of_all_centroid_x_times_area += 0.2550611087 * 0.2043799831
+sum_of_all_centroid_y_times_area += 1.01771365 * 0.2043799831
+# circle 2 (fear right eye, id)
+sum_of_all_areas += 0.2141552227
+sum_of_all_centroid_x_times_area += 0.2610894953 * 0.2141552227
+sum_of_all_centroid_y_times_area += 1.306968692 * 0.2141552227
+
+# Disgust head
+disgust_center = [-1.7852387940488, 0.6450660095549]
+disgust_point_on_circumference = [-2.2835886135613, 1.2037805304659]
+disgust_radius = get_dist(disgust_center, disgust_point_on_circumference)
+disgust_area = math.pi * math.pow(disgust_radius, 2)
+sum_of_all_areas += disgust_area
+sum_of_all_centroid_x_times_area += disgust_center[0] * disgust_area
+sum_of_all_centroid_y_times_area += disgust_center[1] * disgust_area
+
+# Joy Head
+joy_center = [0.0098426979343, 1.5207934851762]
+joy_point_on_circumference = [0.4204548060243, 0.8437203282265]
+joy_radius = get_dist(joy_center, joy_point_on_circumference)
+joy_area = math.pi * math.pow(joy_radius, 2)
+sum_of_all_areas += joy_area
+sum_of_all_centroid_x_times_area += joy_center[0] * joy_area
+sum_of_all_centroid_y_times_area += joy_center[1] * joy_area
 
 com_x = sum_of_all_centroid_x_times_area / sum_of_all_areas
 com_y = sum_of_all_centroid_y_times_area / sum_of_all_areas
