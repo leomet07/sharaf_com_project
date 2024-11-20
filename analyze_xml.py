@@ -291,3 +291,35 @@ cv2.imwrite(save_filename, canvas)
 
 # cv2.waitKey(0)
 # cv2.destroyAllWindows()
+
+with open("table.csv", "w") as table_file:
+    table_file.write("triangle_name,x1,y1,x2,y2,x3,y3\n")
+    for triangle_name in triangles:
+        triangle = triangles[triangle_name]
+        v1, v2, v3 = triangle
+
+        table_file.write(
+            f"{triangle_name},{round(v1[0], 4)},{round(v1[1], 4)},{round(v2[0], 4)},{round(v2[1], 4)},{round(v3[0], 4)},{round(v3[1], 4)}\n"
+        )
+    table_file.write("\n")
+    table_file.write("circle_name,x1,y1,r\n")
+    table_file.write(
+        f"d1,{round(disgust_center[0], 4)},{round(disgust_center[1], 4)},{round(disgust_radius, 4)}\n"
+    )
+    table_file.write(
+        f"j1,{round(joy_center[0], 4)},{round(joy_center[1], 4)},{round(joy_radius, 4)}\n"
+    )
+    table_file.write(
+        f"f1,{round(fear_one_eye_center[0], 4)},{round(fear_one_eye_center[1], 4)},{round(fear_one_eye_radius, 4)}\n"
+    )
+    table_file.write(
+        f"f2,{round(fear_two_eye_center[0], 4)},{round(fear_two_eye_center[1], 4)},{round(fear_two_eye_radius, 4)}\n"
+    )
+
+    table_file.write("\n")
+    table_file.write("ellipse_name,x1,y1,most_ccw_x,most_ccw_y,r\n")
+    table_file.write("e1,3.508,-0.046,2.471,-0.390,1.092\n")
+
+    table_file.write("\n")
+    table_file.write("COM,x1,y1\n")
+    table_file.write(f"COM,{round(com_x, 4)},{round(com_y, 4)}\n")
