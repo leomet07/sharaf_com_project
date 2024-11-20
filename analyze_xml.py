@@ -244,6 +244,27 @@ cv2.circle(
 put_text_at_centroid(canvas, "CENTER OF MASS", [com_x, com_y])
 cv2.imshow("frame", canvas)
 
+# One singular edge case: Rotated Ellipse
+sadness_center = (3.5080485876322, -0.0463498929226)
+axes = (
+    int(1.092556653751 * scale),
+    int(1.092556653751 * scale),
+)  # Major, minor, same here because circle
+angle = 0
+start_angle = 161.5
+end_angle = 341.5  # 180 deg seperation bc semi circle
+cv2.ellipse(
+    canvas,
+    transform_point_to_new_coord_sys(sadness_center),
+    axes,
+    angle,
+    start_angle,
+    end_angle,
+    (0, 255, 0),
+    1,
+)  # Won't show up in desktop preview but is saved to canvas png so all good
+put_text_at_centroid(canvas, "e1", (3.3621215, 0.3937850313))
+
 save_filename = f"canvas_saves/canvas_{str(datetime.now()).replace(" ", "_")}.png"
 cv2.imwrite(save_filename, canvas)
 
