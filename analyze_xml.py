@@ -185,7 +185,7 @@ def put_text_at_centroid(canvas, text, centroid):
         cv2.FONT_HERSHEY_SIMPLEX,
         0.45,  # font size scale
         (0, 0, 255),
-        1,  # thickness
+        2,  # thickness
         cv2.LINE_AA,
     )
 
@@ -268,8 +268,26 @@ cv2.ellipse(
 )  # Won't show up in desktop preview but is saved to canvas png so all good
 put_text_at_centroid(canvas, "e1", (3.3621215, 0.3937850313))
 
+cv2.line(
+    canvas,
+    (0, height_f // 2),
+    (width_f, height_f // 2),
+    (0, 0, 255),
+    1,
+)
+put_text_at_centroid(canvas, "y=0", (-5, -0.1))
+
+cv2.line(
+    canvas,
+    (width_f // 2, 0),
+    (width_f // 2, height_f),
+    (0, 0, 255),
+    1,
+)
+put_text_at_centroid(canvas, "x=0", (-0.1, 2.95))
+
 save_filename = f"canvas_saves/canvas_{str(datetime.now()).replace(" ", "_")}.png"
 cv2.imwrite(save_filename, canvas)
 
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
