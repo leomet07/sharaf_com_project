@@ -5,3 +5,7 @@ venv/
 *.json
 
 *.csv
+
+canvas_saves/
+
+*.png

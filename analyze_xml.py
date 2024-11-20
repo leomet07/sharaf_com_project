@@ -2,6 +2,9 @@
 import xmltodict
 from pprint import pprint
 import math
+import cv2
+import numpy as np
+from datetime import datetime
 
 xml = ""
 with open("geogebra.xml", "r") as geogebra_xml_file:
@@ -138,3 +141,67 @@ print("Edge cases: ", edge_case_polygons)
 # print("Tests: ")
 # print(calculate_area_of_triangle([0, 0], [5, 0], [0, 5]))
 # print(caclulate_centroid_of_triangle([0, 0], [5, 0], [0, 5]))
+
+width_i = 11
+height_i = 6.16
+
+scale = 100
+
+width_f = width_i * scale
+height_f = int(height_i * scale)
+
+canvas = np.zeros((height_f, width_f, 3), np.uint8)
+
+
+def transform_point_to_new_coord_sys(p):
+    return (int((p[0] + 5.5) * scale), int(height_f - (p[1] + 3.13) * scale))
+
+
+def draw_line_on_cv2_image(img, p1, p2):
+    cv2.line(
+        img,
+        transform_point_to_new_coord_sys(p1),
+        transform_point_to_new_coord_sys(p2),
+        (0, 255, 0),
+        1,
+    )
+
+
+for triangle_name in triangles:
+    triangle = triangles[triangle_name]
+
+    v1, v2, v3 = triangle
+    draw_line_on_cv2_image(canvas, v1, v2)
+    draw_line_on_cv2_image(canvas, v2, v3)
+    draw_line_on_cv2_image(canvas, v1, v3)
+
+
+cv2.circle(
+    canvas,
+    transform_point_to_new_coord_sys(disgust_center),
+    int(disgust_radius * scale),
+    (0, 255, 0),
+    1,
+)
+cv2.circle(
+    canvas,
+    transform_point_to_new_coord_sys(joy_center),
+    int(joy_radius * scale),
+    (0, 255, 0),
+    1,
+)
+
+cv2.circle(
+    canvas,
+    transform_point_to_new_coord_sys([com_x, com_y]),
+    5,
+    (255, 0, 0),
+    5,
+)  # plot COM
+cv2.imshow("frame", canvas)
+
+save_filename = f"canvas_saves/canvas_{str(datetime.now()).replace(" ", "_")}.png"
+cv2.imwrite(save_filename, canvas)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
