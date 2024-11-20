@@ -120,7 +120,7 @@ sum_of_all_centroid_y_times_area += fear_two_eye_center[1] * fear_two_eye_radius
 
 # Disgust head
 disgust_center = [-1.7852387940488, 0.6450660095549]
-disgust_point_on_circumference = [-2.2835886135613, 1.2037805304659]
+disgust_point_on_circumference = (-1.2611887819923, 0.1779779553355)
 disgust_radius = get_dist(disgust_center, disgust_point_on_circumference)
 disgust_area = math.pi * math.pow(disgust_radius, 2)
 sum_of_all_areas += disgust_area
@@ -157,6 +157,9 @@ width_f = width_i * scale
 height_f = int(height_i * scale)
 
 canvas = np.zeros((height_f, width_f, 3), np.uint8)
+canvas.fill(255)
+
+OUTLINE_COLOR = (0, 50, 0)
 
 
 def transform_point_to_new_coord_sys(p):
@@ -168,7 +171,7 @@ def draw_line_on_cv2_image(img, p1, p2):
         img,
         transform_point_to_new_coord_sys(p1),
         transform_point_to_new_coord_sys(p2),
-        (0, 255, 0),
+        OUTLINE_COLOR,
         1,
     )
 
@@ -182,7 +185,7 @@ def put_text_at_centroid(canvas, text, centroid):
         cv2.FONT_HERSHEY_SIMPLEX,
         0.45,  # font size scale
         (0, 0, 255),
-        2,  # thickness
+        1,  # thickness
         cv2.LINE_AA,
     )
 
@@ -202,7 +205,7 @@ cv2.circle(
     canvas,
     transform_point_to_new_coord_sys(disgust_center),
     int(disgust_radius * scale),
-    (0, 255, 0),
+    OUTLINE_COLOR,
     1,
 )
 put_text_at_centroid(canvas, "d1", disgust_center)
@@ -211,7 +214,7 @@ cv2.circle(
     canvas,
     transform_point_to_new_coord_sys(joy_center),
     int(joy_radius * scale),
-    (0, 255, 0),
+    OUTLINE_COLOR,
     1,
 )
 put_text_at_centroid(canvas, "j1", joy_center)
@@ -220,7 +223,7 @@ cv2.circle(
     canvas,
     transform_point_to_new_coord_sys(fear_one_eye_center),
     int(fear_one_eye_radius * scale),
-    (0, 255, 0),
+    OUTLINE_COLOR,
     1,
 )
 put_text_at_centroid(canvas, "f1", fear_one_eye_center)
@@ -229,7 +232,7 @@ cv2.circle(
     canvas,
     transform_point_to_new_coord_sys(fear_two_eye_center),
     int(fear_two_eye_radius * scale),
-    (0, 255, 0),
+    OUTLINE_COLOR,
     1,
 )
 put_text_at_centroid(canvas, "f2", fear_two_eye_center)
@@ -260,7 +263,7 @@ cv2.ellipse(
     angle,
     start_angle,
     end_angle,
-    (0, 255, 0),
+    OUTLINE_COLOR,
     1,
 )  # Won't show up in desktop preview but is saved to canvas png so all good
 put_text_at_centroid(canvas, "e1", (3.3621215, 0.3937850313))
