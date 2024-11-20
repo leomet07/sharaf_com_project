@@ -103,14 +103,20 @@ for triangle_name in triangles:
 sum_of_all_areas += 1.875028225
 sum_of_all_centroid_x_times_area += 3.3621215 * 1.875028225
 sum_of_all_centroid_y_times_area += 0.3937850313 * 1.875028225
+
 # circle 1 (fear left eye, id)
-sum_of_all_areas += 0.2043799831
-sum_of_all_centroid_x_times_area += 0.2550611087 * 0.2043799831
-sum_of_all_centroid_y_times_area += 1.01771365 * 0.2043799831
+fear_one_eye_center = (1.4999141151656, 1.3069686921559)
+fear_one_eye_radius = 0.25506110867556045527
+sum_of_all_areas += fear_one_eye_radius
+sum_of_all_centroid_x_times_area += fear_one_eye_center[0] * fear_one_eye_radius
+sum_of_all_centroid_y_times_area += fear_one_eye_center[1] * fear_one_eye_radius
+
 # circle 2 (fear right eye, id)
-sum_of_all_areas += 0.2141552227
-sum_of_all_centroid_x_times_area += 0.2610894953 * 0.2141552227
-sum_of_all_centroid_y_times_area += 1.306968692 * 0.2141552227
+fear_two_eye_center = (1.8822820372248, 1.0224210568007)
+fear_two_eye_radius = 0.25108949531396575204
+sum_of_all_areas += fear_one_eye_radius
+sum_of_all_centroid_x_times_area += fear_two_eye_center[0] * fear_two_eye_radius
+sum_of_all_centroid_y_times_area += fear_two_eye_center[1] * fear_two_eye_radius
 
 # Disgust head
 disgust_center = [-1.7852387940488, 0.6450660095549]
@@ -145,7 +151,7 @@ print("Edge cases: ", edge_case_polygons)
 width_i = 11
 height_i = 6.16
 
-scale = 100
+scale = 300
 
 width_f = width_i * scale
 height_f = int(height_i * scale)
@@ -167,6 +173,20 @@ def draw_line_on_cv2_image(img, p1, p2):
     )
 
 
+def put_text_at_centroid(canvas, text, centroid):
+    # INPUT CENTROID HERE HAS NOT BEEN SCALED YET
+    cv2.putText(
+        canvas,
+        text,
+        transform_point_to_new_coord_sys(centroid),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        0.45,  # font size scale
+        (0, 0, 255),
+        2,  # thickness
+        cv2.LINE_AA,
+    )
+
+
 for triangle_name in triangles:
     triangle = triangles[triangle_name]
 
@@ -175,6 +195,8 @@ for triangle_name in triangles:
     draw_line_on_cv2_image(canvas, v2, v3)
     draw_line_on_cv2_image(canvas, v1, v3)
 
+    centroid = caclulate_centroid_of_triangle(*triangle)
+    put_text_at_centroid(canvas, triangle_name, centroid)
 
 cv2.circle(
     canvas,
@@ -183,6 +205,8 @@ cv2.circle(
     (0, 255, 0),
     1,
 )
+put_text_at_centroid(canvas, "d1", disgust_center)
+
 cv2.circle(
     canvas,
     transform_point_to_new_coord_sys(joy_center),
@@ -190,6 +214,25 @@ cv2.circle(
     (0, 255, 0),
     1,
 )
+put_text_at_centroid(canvas, "j1", joy_center)
+
+cv2.circle(
+    canvas,
+    transform_point_to_new_coord_sys(fear_one_eye_center),
+    int(fear_one_eye_radius * scale),
+    (0, 255, 0),
+    1,
+)
+put_text_at_centroid(canvas, "f1", fear_one_eye_center)
+
+cv2.circle(
+    canvas,
+    transform_point_to_new_coord_sys(fear_two_eye_center),
+    int(fear_two_eye_radius * scale),
+    (0, 255, 0),
+    1,
+)
+put_text_at_centroid(canvas, "f2", fear_two_eye_center)
 
 cv2.circle(
     canvas,
@@ -198,6 +241,7 @@ cv2.circle(
     (255, 0, 0),
     5,
 )  # plot COM
+put_text_at_centroid(canvas, "CENTER OF MASS", [com_x, com_y])
 cv2.imshow("frame", canvas)
 
 save_filename = f"canvas_saves/canvas_{str(datetime.now()).replace(" ", "_")}.png"
