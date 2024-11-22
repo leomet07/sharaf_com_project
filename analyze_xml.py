@@ -103,21 +103,26 @@ for triangle_name in triangles:
 
 # Manually add edge cases
 # Semi circle 1 (sadness head)
-sum_of_all_areas += 1.875028225
-sum_of_all_centroid_x_times_area += 3.3621215 * 1.875028225
-sum_of_all_centroid_y_times_area += 0.3937850313 * 1.875028225
+semi_circle_x_com = 3.3621215
+semi_circle_y_com = 0.3937850313
+semi_circle_area = 1.875028225
+sum_of_all_areas += semi_circle_area
+sum_of_all_centroid_x_times_area += semi_circle_x_com * semi_circle_area
+sum_of_all_centroid_y_times_area += semi_circle_y_com * semi_circle_area
 
 # circle 1 (fear left eye, id)
 fear_one_eye_center = (1.4999141151656, 1.3069686921559)
 fear_one_eye_radius = 0.25506110867556045527
-sum_of_all_areas += fear_one_eye_radius
+fear_one_eye_area = math.pi * math.pow(fear_one_eye_radius, 2)
+sum_of_all_areas += fear_one_eye_area
 sum_of_all_centroid_x_times_area += fear_one_eye_center[0] * fear_one_eye_radius
 sum_of_all_centroid_y_times_area += fear_one_eye_center[1] * fear_one_eye_radius
 
 # circle 2 (fear right eye, id)
 fear_two_eye_center = (1.8822820372248, 1.0224210568007)
 fear_two_eye_radius = 0.25108949531396575204
-sum_of_all_areas += fear_one_eye_radius
+fear_two_eye_area = math.pi * math.pow(fear_two_eye_radius, 2)
+sum_of_all_areas += fear_two_eye_area
 sum_of_all_centroid_x_times_area += fear_two_eye_center[0] * fear_two_eye_radius
 sum_of_all_centroid_y_times_area += fear_two_eye_center[1] * fear_two_eye_radius
 
@@ -272,7 +277,7 @@ cv2.ellipse(
     OUTLINE_COLOR,
     1,
 )  # Won't show up in desktop preview but is saved to canvas png so all good
-put_text_at_centroid(canvas, "e1", (3.3621215, 0.3937850313))
+put_text_at_centroid(canvas, "s1", (semi_circle_x_com, semi_circle_y_com))
 
 cv2.line(
     canvas,
@@ -299,33 +304,41 @@ cv2.imwrite(save_filename, canvas)
 # cv2.destroyAllWindows()
 
 with open("table.csv", "w") as table_file:
-    table_file.write("triangle_name,x1,y1,x2,y2,x3,y3\n")
+    table_file.write("triangle_name,x1,y1,x2,y2,x3,y3,x_com,y_com,area\n")
     for triangle_name in triangles:
         triangle = triangles[triangle_name]
         v1, v2, v3 = triangle
 
+        centroid = caclulate_centroid_of_triangle(*triangle)
+
         table_file.write(
-            f"{triangle_name},{round(v1[0], 4)},{round(v1[1], 4)},{round(v2[0], 4)},{round(v2[1], 4)},{round(v3[0], 4)},{round(v3[1], 4)}\n"
+            f"{triangle_name},{round(v1[0], 4)},{round(v1[1], 4)},{round(v2[0], 4)},{round(v2[1], 4)},{round(v3[0], 4)},{round(v3[1], 4)},{round(centroid[0],4)},{round(centroid[1],4)},{round(calculate_area_of_triangle(*triangle), 4)}\n"
         )
     table_file.write("\n")
-    table_file.write("circle_name,x1,y1,r\n")
+    table_file.write("circle_name,x,y,r,area\n")
     table_file.write(
-        f"d1,{round(disgust_center[0], 4)},{round(disgust_center[1], 4)},{round(disgust_radius, 4)}\n"
+        f"d1,{round(disgust_center[0], 4)},{round(disgust_center[1], 4)},{round(disgust_radius, 4)},{round(disgust_area, 4)}\n"
     )
     table_file.write(
-        f"j1,{round(joy_center[0], 4)},{round(joy_center[1], 4)},{round(joy_radius, 4)}\n"
+        f"j1,{round(joy_center[0], 4)},{round(joy_center[1], 4)},{round(joy_radius, 4)},{round(joy_area, 4)}\n"
     )
     table_file.write(
-        f"f1,{round(fear_one_eye_center[0], 4)},{round(fear_one_eye_center[1], 4)},{round(fear_one_eye_radius, 4)}\n"
+        f"f1,{round(fear_one_eye_center[0], 4)},{round(fear_one_eye_center[1], 4)},{round(fear_one_eye_radius, 4)},{round(fear_one_eye_area, 4)}\n"
     )
     table_file.write(
-        f"f2,{round(fear_two_eye_center[0], 4)},{round(fear_two_eye_center[1], 4)},{round(fear_two_eye_radius, 4)}\n"
+        f"f2,{round(fear_two_eye_center[0], 4)},{round(fear_two_eye_center[1], 4)},{round(fear_two_eye_radius, 4)},{round(fear_two_eye_area, 4)}\n"
     )
 
     table_file.write("\n")
-    table_file.write("ellipse_name,x1,y1,most_ccw_x,most_ccw_y,r\n")
-    table_file.write("e1,3.508,-0.046,2.471,-0.390,1.092\n")
+    table_file.write(
+        "semi_circle_name,x1,y1,x_com,y_com,most_ccw_x,most_ccw_y,r,area\n"
+    )
+    table_file.write(
+        f"s1,3.50804858,-0.04634989292,{round(semi_circle_x_com, 4)},{round(semi_circle_y_com, 4)},2.471,-0.390,1.092,{round(semi_circle_area,4)}\n"
+    )
 
     table_file.write("\n")
     table_file.write("COM,x1,y1\n")
     table_file.write(f"COM,{round(com_x, 4)},{round(com_y, 4)}\n")
+    table_file.write("total_area\n")
+    table_file.write(f"{round(sum_of_all_areas,4)}\n")
