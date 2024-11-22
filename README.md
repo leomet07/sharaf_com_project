@@ -25,4 +25,6 @@ Run the script!
 python analyze_xml.py
 ```
 
-You should see a png titled ``canvas_TIMESTAMP.png`` in a (new) output directory of ``canvas_saves/``.
+It will print out the [x, y] coordiantes of the COM, as well as the total area. This corresponds to the units of your GeoGebra scale, which in our project was inches (inches^2 for area).
+
+Additonally, you should see a png titled ``canvas_TIMESTAMP.png`` in a (new) output directory of ``canvas_saves/``. This is the generated scaled diagram with shape name labels. There will also be an ``table.csv`` created with the defining features of the triangles/circles/semicircles matching up to a shape name.
