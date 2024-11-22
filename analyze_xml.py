@@ -138,10 +138,9 @@ sum_of_all_centroid_y_times_area += joy_center[1] * joy_area
 
 com_x = sum_of_all_centroid_x_times_area / sum_of_all_areas
 com_y = sum_of_all_centroid_y_times_area / sum_of_all_areas
-print([com_x, com_y])
-
-print(len(expressions), len(elements), len(commands))
-print("Counted points: ", c)
+print("COM: ", [round(com_x, 4), round(com_y, 4)])
+print("Total area: ", round(sum_of_all_areas, 4))
+print("Known points: ", c)
 print("Edge cases: ", edge_case_polygons)
 
 # print("Tests: ")
