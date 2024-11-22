@@ -1,10 +1,13 @@
-# import xml.etree.ElementTree as ET
 import xmltodict
 from pprint import pprint
 import math
 import cv2
 import numpy as np
 from datetime import datetime
+import os
+
+if not os.path.exists("canvas_saves"):
+    os.mkdir("canvas_saves")
 
 xml = ""
 with open("geogebra.xml", "r") as geogebra_xml_file:
