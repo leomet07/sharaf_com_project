@@ -17,10 +17,9 @@ pip install -r requirements.txt
 # Running
 
 *** By default, this project is pre-configured to calculate our GeoGebra project from class.
-*** To use your own geogebra file, delete Make sure that you download your GeoGebra file (*.ggb) and unzip (yes, unzip! it is a zip file in secret) it. There, you should find a ``geogebra.xml`` file, which you should move into this project's directory and overwrite the default.
+*** To use your own geogebra file, download your GeoGebra file (*.ggb) and unzip (yes, unzip! it is a zip file in secret) it. There, you should find a ``geogebra.xml`` file, which you should move into this project's directory and overwrite the default.
 
-Then, run the script!
-
+Run the script!
 
 ```bash
 python analyze_xml.py
